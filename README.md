@@ -32,7 +32,7 @@ Un portafolio web moderno y responsivo construido con Next.js 16, TypeScript, y 
 
 1. **Clonar el repositorio**
 ```bash
-git clone https://github.com/tu-usuario/portafolio.git
+git clone https://github.com/OliverN77/Portafolio.git
 cd portafolio
 ```
 
