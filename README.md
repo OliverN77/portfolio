@@ -32,7 +32,7 @@ Un portafolio web moderno y responsivo construido con Next.js 16, TypeScript, y 
 
 1. **Clonar el repositorio**
 ```bash
-git clone https://github.com/OliverN77/Portafolio.git
+git clone https://github.com/OliverN77/portfolio.git
 cd portafolio
 ```
 
@@ -114,7 +114,7 @@ Los componentes en [components/sections/](components/sections/) contienen la inf
 2. Vercel detectará automáticamente Next.js y configurará todo
 3. Tu sitio estará en línea en minutos
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/tu-usuario/portafolio)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=[https://github.com/OliverN77/portfolio.git])
 
 ### Otras opciones
 
@@ -128,9 +128,9 @@ Este proyecto es de código abierto y está disponible bajo la [Licencia MIT](LI
 
 ## 👤 Contacto
 
-Oliver - [Tu Email](mailto:tu-email@ejemplo.com)
+Oliver - [olivernie2626@gmail.com](mailto:olivernie2626@gmail.com)
 
-Link del proyecto: [https://github.com/tu-usuario/portafolio](https://github.com/tu-usuario/portafolio)
+Link del proyecto: [https://github.com/OliverN77/portfolio.git](https://github.com/OliverN77/portfolio.git)
 
 ---
 
