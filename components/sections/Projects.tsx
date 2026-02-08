@@ -2,19 +2,12 @@
 
 import { motion } from 'framer-motion';
 import { ExternalLink, Github, Code2 } from 'lucide-react';
-<<<<<<< HEAD
 import dynamic from 'next/dynamic';
 import { memo, useMemo, useState, useEffect } from 'react';
-=======
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Float, Sphere, MeshDistortMaterial, Stars } from '@react-three/drei';
-import { Suspense } from 'react';
->>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import Image from 'next/image';
 
-<<<<<<< HEAD
 // Lazy load componentes 3D
 const Canvas = dynamic(
   () => import('@react-three/fiber').then((mod) => mod.Canvas),
@@ -83,16 +76,6 @@ const AnimatedSphere = memo(({ theme, isMobile }: { theme: string; isMobile: boo
     // Menos esferas en móviles
     showAllSpheres: !isMobile
   }), [isMobile, theme]);
-=======
-// Componente 3D animado
-function AnimatedSphere() {
-  const { theme } = useTheme();
-
-  // Colores según el tema
-  const primaryColor = theme === 'dark' ? '#7C3AED' : '#9333EA';
-  const secondaryColor = theme === 'dark' ? '#EC4899' : '#F472B6';
-  const accentColor = theme === 'dark' ? '#00D9FF' : '#22D3EE';
->>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
 
   return (
     <>
@@ -100,18 +83,13 @@ function AnimatedSphere() {
       <Stars 
         radius={100} 
         depth={50} 
-<<<<<<< HEAD
         count={config.starsCount}
-=======
-        count={theme === 'dark' ? 4000 : 2500} 
->>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
         factor={4} 
         saturation={theme === 'dark' ? 0 : 0.3} 
         fade 
         speed={1} 
       />
 
-<<<<<<< HEAD
       {/* Esfera principal - siempre visible */}
       <Float speed={2} rotationIntensity={1} floatIntensity={2}>
         <Sphere args={[1, config.segments, config.segments]} scale={2}>
@@ -120,40 +98,10 @@ function AnimatedSphere() {
             attach="material"
             distort={0.5}
             speed={config.distortSpeed}
-=======
-      <Float speed={2} rotationIntensity={1} floatIntensity={2}>
-        <Sphere args={[1, 100, 100]} scale={2}>
-          <MeshDistortMaterial
-            color={primaryColor}
-            attach="material"
-            distort={0.5}
-            speed={2}
             roughness={0.2}
             metalness={0.8}
           />
         </Sphere>
-        <Sphere args={[0.8, 100, 100]} scale={2} position={[1.5, 0, 0]}>
-          <MeshDistortMaterial
-            color={secondaryColor}
-            attach="material"
-            distort={0.4}
-            speed={1.5}
-            roughness={0.2}
-            metalness={0.8}
-          />
-        </Sphere>
-        <Sphere args={[0.6, 100, 100]} scale={2} position={[-1.2, 0.5, 0.5]}>
-          <MeshDistortMaterial
-            color={accentColor}
-            attach="material"
-            distort={0.6}
-            speed={1.8}
->>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
-            roughness={0.2}
-            metalness={0.8}
-          />
-        </Sphere>
-<<<<<<< HEAD
         
         {/* Esferas adicionales - solo en desktop/tablet */}
         {config.showAllSpheres && (
@@ -186,25 +134,14 @@ function AnimatedSphere() {
 });
 
 AnimatedSphere.displayName = 'AnimatedSphere';
-=======
-      </Float>
-    </>
-  );
-}
->>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
 
 export default function Projects() {
   const { theme } = useTheme();
   const { t } = useLanguage();
-<<<<<<< HEAD
   const isMobile = useIsMobile();
 
   // Memoizar projects para evitar recreación
   const projects = useMemo(() => [
-=======
-
-  const projects = [
->>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
     {
       title: t('projects.items.perfume.title'),
       description: t('projects.items.perfume.description'),
@@ -259,7 +196,6 @@ export default function Projects() {
       demo: 'https://calculadora-nota-alpha.vercel.app/',
       color: '#EF4444'
     },
-<<<<<<< HEAD
   ], [t, theme]);
 
   // Colores dinámicos memoizados
@@ -285,30 +221,11 @@ export default function Projects() {
       ? 'linear-gradient(135deg, #7C3AED 0%, #EC4899 100%)'
       : 'linear-gradient(135deg, #9333EA 0%, #F472B6 100%)'
   }), [theme]);
-=======
-  ];
-
-  // Colores dinámicos según el tema
-  const bgGradient = theme === 'dark'
-    ? 'linear-gradient(to bottom, rgba(31, 41, 55, 0.85) 0%, rgba(17, 24, 39, 0.9) 50%, rgba(88, 28, 135, 0.85) 100%)'
-    : 'linear-gradient(to bottom, rgba(255, 255, 255, 0.85) 0%, rgba(249, 250, 251, 0.9) 50%, rgba(243, 232, 255, 0.85) 100%)';
-
-  const textPrimary = theme === 'dark' ? '#ffffff' : '#111827';
-  const textSecondary = theme === 'dark' ? '#d1d5db' : '#4b5563';
-  const textTertiary = theme === 'dark' ? '#9ca3af' : '#6b7280';
-  const cardBg = theme === 'dark' ? 'rgba(31, 41, 55, 0.5)' : 'rgba(255, 255, 255, 0.9)';
-  const cardBorder = theme === 'dark' ? 'rgba(75, 85, 99, 0.5)' : 'rgba(229, 231, 235, 1)';
-  const overlayBg = theme === 'dark' ? 'rgba(31, 41, 55, 0.9)' : 'rgba(255, 255, 255, 0.9)';
-  const tagBg = theme === 'dark' ? 'rgba(55, 65, 81, 0.5)' : 'rgba(243, 244, 246, 1)';
-  const tagText = theme === 'dark' ? '#d1d5db' : '#374151';
-  const tagBorder = theme === 'dark' ? 'rgba(75, 85, 99, 1)' : 'rgba(209, 213, 219, 1)';
->>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
 
   return (
     <section 
       id="projects" 
       className="py-20 px-4 relative overflow-hidden transition-all duration-500"
-<<<<<<< HEAD
       style={{ background: styles.bgGradient }}
     >
       {/* 3D Background optimizado */}
@@ -337,23 +254,6 @@ export default function Projects() {
           </Canvas>
         </div>
       )}
-=======
-      style={{ background: bgGradient }}
-    >
-      {/* 3D Background */}
-      <div className={`absolute inset-0 transition-opacity duration-500 ${theme === 'dark' ? 'opacity-50' : 'opacity-30'}`}>
-        <Canvas camera={{ position: [0, 0, 5], fov: 75 }}>
-          <ambientLight intensity={theme === 'dark' ? 1 : 1.5} />
-          <directionalLight position={[10, 10, 5]} intensity={theme === 'dark' ? 2 : 2.5} />
-          <pointLight position={[-10, -10, -5]} intensity={1.2} color={theme === 'dark' ? '#7C3AED' : '#9333EA'} />
-          <pointLight position={[10, 10, 5]} intensity={1} color={theme === 'dark' ? '#EC4899' : '#F472B6'} />
-          <Suspense fallback={null}>
-            <AnimatedSphere />
-          </Suspense>
-          <OrbitControls enableZoom={false} autoRotate autoRotateSpeed={0.5} />
-        </Canvas>
-      </div>
->>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
 
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Section Title */}
@@ -367,13 +267,7 @@ export default function Projects() {
           <h2 
             className="text-5xl md:text-6xl font-bold mb-4 bg-clip-text text-transparent"
             style={{ 
-<<<<<<< HEAD
               backgroundImage: styles.titleGradient,
-=======
-              backgroundImage: theme === 'dark'
-                ? 'linear-gradient(135deg, #00D9FF 0%, #7C3AED 30%, #EC4899 60%, #F59E0B 100%)'
-                : 'linear-gradient(135deg, #06B6D4 0%, #9333EA 30%, #F472B6 60%, #F59E0B 100%)',
->>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent'
             }}
@@ -383,13 +277,7 @@ export default function Projects() {
           <motion.div 
             className="w-32 h-1.5 mx-auto rounded-full relative overflow-hidden"
             style={{ 
-<<<<<<< HEAD
               background: styles.underlineGradient
-=======
-              background: theme === 'dark'
-                ? 'linear-gradient(90deg, #00D9FF 0%, #7C3AED 50%, #EC4899 100%)'
-                : 'linear-gradient(90deg, #06B6D4 0%, #9333EA 50%, #F472B6 100%)'
->>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
             }}
             initial={{ width: 0 }}
             whileInView={{ width: 128 }}
@@ -407,11 +295,7 @@ export default function Projects() {
           </motion.div>
           <motion.p 
             className="mt-6 text-lg max-w-2xl mx-auto transition-colors duration-300"
-<<<<<<< HEAD
             style={{ color: styles.textSecondary }}
-=======
-            style={{ color: textSecondary }}
->>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
@@ -436,17 +320,10 @@ export default function Projects() {
               <div 
                 className="h-full rounded-2xl overflow-hidden shadow-xl backdrop-blur-sm transition-all duration-300"
                 style={{
-<<<<<<< HEAD
                   backgroundColor: styles.cardBg,
                   borderWidth: '1px',
                   borderStyle: 'solid',
                   borderColor: styles.cardBorder
-=======
-                  backgroundColor: cardBg,
-                  borderWidth: '1px',
-                  borderStyle: 'solid',
-                  borderColor: cardBorder
->>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
                 }}
               >
                 {/* Project Image */}
@@ -468,22 +345,14 @@ export default function Projects() {
                 <div className="p-6 space-y-4">
                   <h3 
                     className="text-2xl font-bold transition-colors duration-300"
-<<<<<<< HEAD
                     style={{ color: styles.textPrimary }}
-=======
-                    style={{ color: textPrimary }}
->>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
                   >
                     {project.title}
                   </h3>
                   
                   <p 
                     className="text-sm leading-relaxed transition-colors duration-300"
-<<<<<<< HEAD
                     style={{ color: styles.textTertiary }}
-=======
-                    style={{ color: textTertiary }}
->>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
                   >
                     {project.description}
                   </p>
@@ -495,19 +364,11 @@ export default function Projects() {
                         key={tagIndex}
                         className="px-3 py-1 text-xs font-medium rounded-full transition-colors duration-300"
                         style={{
-<<<<<<< HEAD
                           backgroundColor: styles.tagBg,
                           color: styles.tagText,
                           borderWidth: '1px',
                           borderStyle: 'solid',
                           borderColor: styles.tagBorder
-=======
-                          backgroundColor: tagBg,
-                          color: tagText,
-                          borderWidth: '1px',
-                          borderStyle: 'solid',
-                          borderColor: tagBorder
->>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
                         }}
                         whileHover={{ scale: 1.1, y: -2 }}
                         transition={{ type: "spring", stiffness: 400 }}
@@ -543,13 +404,8 @@ export default function Projects() {
                       rel="noopener noreferrer"
                       className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-all duration-300 shadow-md"
                       style={{
-<<<<<<< HEAD
                         backgroundColor: styles.cardBg,
                         color: styles.textPrimary,
-=======
-                        backgroundColor: cardBg,
-                        color: textPrimary,
->>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
                         borderWidth: '2px',
                         borderStyle: 'solid',
                         borderColor: project.color
@@ -585,13 +441,7 @@ export default function Projects() {
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-8 py-4 rounded-full font-semibold text-white transition-all duration-300 shadow-lg"
             style={{ 
-<<<<<<< HEAD
               background: styles.viewMoreGradient
-=======
-              background: theme === 'dark'
-                ? 'linear-gradient(135deg, #7C3AED 0%, #EC4899 100%)'
-                : 'linear-gradient(135deg, #9333EA 0%, #F472B6 100%)'
->>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
             }}
             whileHover={{ 
               scale: 1.05, 
