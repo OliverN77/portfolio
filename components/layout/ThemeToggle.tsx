@@ -3,15 +3,9 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { Moon, Sun } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
-<<<<<<< HEAD
 import { useEffect, useState, memo } from 'react';
 
 const ThemeToggle = memo(function ThemeToggle() {
-=======
-import { useEffect, useState } from 'react';
-
-export default function ThemeToggle() {
->>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
   const { theme, toggleTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
@@ -59,10 +53,6 @@ export default function ThemeToggle() {
       </AnimatePresence>
     </motion.button>
   );
-<<<<<<< HEAD
 });
 
 export default ThemeToggle;
-=======
-}
->>>>>>> 5d42b2d674391f40d89be814cd669304af02e453

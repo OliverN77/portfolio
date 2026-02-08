@@ -84,15 +84,11 @@ export const translations = {
                 namePlaceholder: 'tu nombre',
                 emailPlaceholder: 'tu@email.com',
                 messagePlaceholder: 'cuéntame sobre tu proyecto',
-<<<<<<< HEAD
                 submit: 'Enviar mensaje',
                 sending: 'Enviando...',
                 success: '¡Mensaje enviado con éxito! Te responderé pronto.',
                 error: 'Error al enviar el mensaje. Por favor inténtalo de nuevo.',
                 notConfigured: 'El servicio de correo aún no está configurado. Contáctame directamente por email.'
-=======
-                submit: 'Enviar mensaje'
->>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
             },
             phone: 'Teléfono',
             location: 'Ubicación',
@@ -196,15 +192,11 @@ export const translations = {
                 namePlaceholder: 'your name',
                 emailPlaceholder: 'your@email.com',
                 messagePlaceholder: 'tell me about your project',
-<<<<<<< HEAD
                 submit: 'Send message',
                 sending: 'Sending...',
                 success: 'Message sent successfully! I\'ll get back to you soon.',
                 error: 'Error sending message. Please try again.',
                 notConfigured: 'Email service not configured yet. Please contact me directly via email.'
-=======
-                submit: 'Send message'
->>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
             },
             phone: 'Phone',
             location: 'Location',
@@ -307,15 +299,11 @@ export const translations = {
                 namePlaceholder: 'Ihr Name',
                 emailPlaceholder: 'ihre@email.com',
                 messagePlaceholder: 'Erzählen Sie mir von Ihrem Projekt',
-<<<<<<< HEAD
                 submit: 'Nachricht senden',
                 sending: 'Wird gesendet...',
                 success: 'Nachricht erfolgreich gesendet! Ich werde mich bald bei dir melden.',
                 error: 'Fehler beim Senden der Nachricht. Bitte versuche es erneut.',
                 notConfigured: 'E-Mail-Dienst noch nicht konfiguriert. Bitte kontaktiere mich direkt per E-Mail.'
-=======
-                submit: 'Nachricht senden'
->>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
             },
             phone: 'Telefon',
             location: 'Standort',
@@ -418,15 +406,11 @@ export const translations = {
                 namePlaceholder: 'il tuo nome',
                 emailPlaceholder: 'tua@email.com',
                 messagePlaceholder: 'raccontami del tuo progetto',
-<<<<<<< HEAD
                 submit: 'Invia messaggio',
                 sending: 'Invio in corso...',
                 success: 'Messaggio inviato con successo! Ti risponderò presto.',
                 error: 'Errore nell\'invio del messaggio. Per favore riprova.',
                 notConfigured: 'Servizio email non ancora configurato. Per favore contattami direttamente via email.'
-=======
-                submit: 'Invia messaggio'
->>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
             },
             phone: 'Telefono',
             location: 'Posizione',
