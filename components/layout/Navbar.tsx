@@ -1,6 +1,10 @@
 'use client';
 
+<<<<<<< HEAD
 import { useState, useEffect, useMemo, useCallback } from 'react';
+=======
+import { useState, useEffect } from 'react';
+>>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
 import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -17,21 +21,32 @@ export default function Navbar() {
     const [activeSection, setActiveSection] = useState('#hero');
     const [scrolled, setScrolled] = useState(false);
 
+<<<<<<< HEAD
     // Memoizar navLinks para evitar recreación
     const navLinks = useMemo(() => [
+=======
+    const navLinks = [
+>>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
         { name: t('nav.home'), href: '#hero' },
         { name: t('nav.about'), href: '#about' },
         { name: t('nav.skills'), href: '#skills' },
         { name: t('nav.projects'), href: '#projects' },
         { name: t('nav.contact'), href: '#contact' },
+<<<<<<< HEAD
     ], [t]);
 
     // Memoizar languages array
     const languages = useMemo(() => [
+=======
+    ];
+
+    const languages = [
+>>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
         { name: 'Español', flag: '🇪🇸', code: 'es' as Language },
         { name: 'English (US)', flag: '🇺🇸', code: 'en' as Language },
         { name: 'Deutsch', flag: '🇩🇪', code: 'de' as Language },
         { name: 'Italiano', flag: '🇮🇹', code: 'it' as Language },
+<<<<<<< HEAD
     ], []);
 
     // Memoizar selectedLanguageName
@@ -48,6 +63,11 @@ export default function Navbar() {
         borderColor: theme === 'dark' ? '#374151' : '#e5e7eb',
         dropdownBg: theme === 'dark' ? 'rgba(31, 41, 55, 0.95)' : 'rgba(255, 255, 255, 0.95)'
     }), [theme]);
+=======
+    ];
+
+    const selectedLanguageName = languages.find(l => l.code === language)?.name || 'Español';
+>>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
 
     useEffect(() => {
         const handleScroll = () => {
@@ -73,10 +93,16 @@ export default function Navbar() {
         handleScroll();
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
+<<<<<<< HEAD
     }, [navLinks]);
 
     // Memoizar scrollToSection con useCallback
     const scrollToSection = useCallback((e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+=======
+    }, []);
+
+    const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+>>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
         e.preventDefault();
         setActiveSection(href);
         const element = document.querySelector(href);
@@ -84,6 +110,7 @@ export default function Navbar() {
             element.scrollIntoView({ behavior: 'smooth' });
             setIsMobileMenuOpen(false);
         }
+<<<<<<< HEAD
     }, []);
 
     // Memoizar handleLanguageSelect con useCallback
@@ -91,6 +118,20 @@ export default function Navbar() {
         setLanguage(langCode);
         setIsLanguageOpen(false);
     }, [setLanguage]);
+=======
+    };
+
+    const handleLanguageSelect = (langCode: Language) => {
+        setLanguage(langCode);
+        setIsLanguageOpen(false);
+    };
+
+    // Colores según el tema
+    const bgColor = theme === 'dark' ? 'rgba(17, 24, 39, 0.9)' : 'rgba(255, 255, 255, 0.9)';
+    const textColor = theme === 'dark' ? '#ffffff' : '#111827';
+    const buttonBg = theme === 'dark' ? 'rgba(31, 41, 55, 0.5)' : 'rgba(255, 255, 255, 0.5)';
+    const borderColor = theme === 'dark' ? '#374151' : '#e5e7eb';
+>>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
 
     return (
         <motion.nav
@@ -103,7 +144,11 @@ export default function Navbar() {
                     : 'bg-transparent'
             }`}
             style={scrolled ? {
+<<<<<<< HEAD
                 backgroundColor: styles.bgColor,
+=======
+                backgroundColor: bgColor,
+>>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
             } : {}}
         >
             <div className="max-w-7xl flex flex-wrap items-center justify-between mx-auto p-4">
@@ -112,7 +157,11 @@ export default function Navbar() {
                     <motion.span
                         className="self-center text-xl font-semibold whitespace-nowrap transition-colors duration-300"
                         style={{
+<<<<<<< HEAD
                             color: scrolled ? styles.textColor : 'white'
+=======
+                            color: scrolled ? textColor : 'white'
+>>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
                         }}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
@@ -137,9 +186,15 @@ export default function Navbar() {
                                     : 'bg-white/10 hover:bg-white/20 border-white/20 text-white backdrop-blur-sm'
                             }`}
                             style={scrolled ? {
+<<<<<<< HEAD
                                 backgroundColor: styles.buttonBg,
                                 color: styles.textColor,
                                 borderColor: styles.borderColor
+=======
+                                backgroundColor: buttonBg,
+                                color: textColor,
+                                borderColor: borderColor
+>>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
                             } : {}}
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
@@ -158,8 +213,13 @@ export default function Navbar() {
                                     transition={{ duration: 0.2 }}
                                     className="absolute right-0 mt-2 w-44 rounded-lg shadow-xl border backdrop-blur-lg z-50"
                                     style={{
+<<<<<<< HEAD
                                         backgroundColor: styles.dropdownBg,
                                         borderColor: styles.borderColor
+=======
+                                        backgroundColor: theme === 'dark' ? 'rgba(31, 41, 55, 0.95)' : 'rgba(255, 255, 255, 0.95)',
+                                        borderColor: borderColor
+>>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
                                     }}
                                 >
                                     <ul className="p-2 text-sm font-medium">
@@ -196,8 +256,13 @@ export default function Navbar() {
                                 : 'bg-white/10 hover:bg-white/20 text-white backdrop-blur-sm'
                         }`}
                         style={scrolled ? {
+<<<<<<< HEAD
                             backgroundColor: styles.buttonBg,
                             color: styles.textColor
+=======
+                            backgroundColor: buttonBg,
+                            color: textColor
+>>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
                         } : {}}
                         aria-controls="navbar-language"
                         aria-expanded={isMobileMenuOpen}
@@ -245,8 +310,13 @@ export default function Navbar() {
                                 : 'bg-transparent border-transparent'
                         }`}
                         style={isMobileMenuOpen ? {
+<<<<<<< HEAD
                             backgroundColor: styles.bgColor,
                             borderColor: styles.borderColor
+=======
+                            backgroundColor: bgColor,
+                            borderColor: borderColor
+>>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
                         } : {}}
                     >
                         {navLinks.map((link, index) => (

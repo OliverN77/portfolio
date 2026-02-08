@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { Code2, Palette, Zap, Heart } from 'lucide-react';
+<<<<<<< HEAD
 import dynamic from 'next/dynamic';
 import { memo, useMemo, useState, useEffect } from 'react';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -76,6 +77,22 @@ const AnimatedRings = memo(({ theme, isMobile }: { theme: string; isMobile: bool
     // Renderizar menos torus en móviles
     showAllTorus: !isMobile
   }), [isMobile, theme]);
+=======
+import { Canvas } from '@react-three/fiber';
+import { OrbitControls, Float, Torus, MeshDistortMaterial, Stars } from '@react-three/drei';
+import { Suspense } from 'react';
+import { useTheme } from '@/contexts/ThemeContext';
+import { useLanguage } from '@/contexts/LanguageContext';
+
+// Componente 3D para About - Anillos entrelazados
+function AnimatedRings() {
+  const { theme } = useTheme();
+
+  // Colores según el tema
+  const primaryColor = theme === 'dark' ? '#7C3AED' : '#9333EA';
+  const secondaryColor = theme === 'dark' ? '#EC4899' : '#F472B6';
+  const accentColor = theme === 'dark' ? '#00D9FF' : '#22D3EE';
+>>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
 
   return (
     <>
@@ -83,13 +100,18 @@ const AnimatedRings = memo(({ theme, isMobile }: { theme: string; isMobile: bool
       <Stars 
         radius={100} 
         depth={50} 
+<<<<<<< HEAD
         count={config.starsCount}
+=======
+        count={theme === 'dark' ? 5000 : 3000} 
+>>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
         factor={4} 
         saturation={theme === 'dark' ? 0 : 0.3} 
         fade 
         speed={1} 
       />
 
+<<<<<<< HEAD
       {/* Torus principal - siempre visible */}
       <Float speed={2} rotationIntensity={0.5} floatIntensity={1}>
         <Torus args={[1.5, 0.3, config.radialSegments, config.tubularSegments]} rotation={[Math.PI / 4, 0, 0]}>
@@ -98,12 +120,23 @@ const AnimatedRings = memo(({ theme, isMobile }: { theme: string; isMobile: bool
             attach="material"
             distort={0.3}
             speed={config.distortSpeed}
+=======
+      {/* Torus principal */}
+      <Float speed={2} rotationIntensity={0.5} floatIntensity={1}>
+        <Torus args={[1.5, 0.3, 16, 100]} rotation={[Math.PI / 4, 0, 0]}>
+          <MeshDistortMaterial
+            color={primaryColor}
+            attach="material"
+            distort={0.3}
+            speed={1.5}
+>>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
             roughness={0.1}
             metalness={0.9}
           />
         </Torus>
       </Float>
 
+<<<<<<< HEAD
       {/* Torus adicionales - solo en desktop/tablet */}
       {config.showAllTorus && (
         <>
@@ -139,14 +172,51 @@ const AnimatedRings = memo(({ theme, isMobile }: { theme: string; isMobile: bool
 });
 
 AnimatedRings.displayName = 'AnimatedRings';
+=======
+      {/* Torus secundario */}
+      <Float speed={1.8} rotationIntensity={0.6} floatIntensity={1}>
+        <Torus args={[1, 0.25, 16, 100]} rotation={[Math.PI / 2, Math.PI / 4, 0]} position={[0.5, 0, 0]}>
+          <MeshDistortMaterial
+            color={secondaryColor}
+            attach="material"
+            distort={0.4}
+            speed={1.8}
+            roughness={0.1}
+            metalness={0.9}
+          />
+        </Torus>
+      </Float>
+
+      {/* Torus terciario */}
+      <Float speed={2} rotationIntensity={0.4} floatIntensity={1.2}>
+        <Torus args={[0.8, 0.2, 16, 100]} rotation={[0, Math.PI / 3, Math.PI / 4]} position={[-0.3, 0.2, 0]}>
+          <MeshDistortMaterial
+            color={accentColor}
+            attach="material"
+            distort={0.5}
+            speed={2}
+            roughness={0.1}
+            metalness={0.9}
+          />
+        </Torus>
+      </Float>
+    </>
+  );
+}
+>>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
 
 export default function About() {
   const { theme } = useTheme();
   const { t } = useLanguage();
+<<<<<<< HEAD
   const isMobile = useIsMobile();
 
   // Memoizar highlights para evitar recreación
   const highlights = useMemo(() => [
+=======
+
+  const highlights = [
+>>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
     {
       icon: <Code2 className="w-8 h-8" />,
       title: t('about.highlights.webDev'),
@@ -167,6 +237,7 @@ export default function About() {
       title: t('about.highlights.passion'),
       description: 'Apasionado por crear soluciones innovadoras',
     },
+<<<<<<< HEAD
   ], [t]);
 
   // Stats memoizados
@@ -194,11 +265,27 @@ export default function About() {
       ? 'linear-gradient(90deg, #00D9FF 0%, #7C3AED 50%, #EC4899 100%)'
       : 'linear-gradient(90deg, #06B6D4 0%, #9333EA 50%, #F472B6 100%)'
   }), [theme]);
+=======
+  ];
+
+  // Colores dinámicos según el tema
+  const bgGradient = theme === 'dark'
+    ? 'linear-gradient(to bottom, rgba(88, 28, 135, 0.95) 0%, rgba(76, 29, 149, 0.9) 50%, rgba(17, 24, 39, 0.85) 100%)'
+    : 'linear-gradient(to bottom, rgba(233, 213, 255, 0.95) 0%, rgba(221, 214, 254, 0.9) 50%, rgba(243, 244, 246, 0.85) 100%)';
+
+  const textPrimary = theme === 'dark' ? '#ffffff' : '#1f2937';
+  const textSecondary = theme === 'dark' ? 'rgba(255, 255, 255, 0.8)' : '#4b5563';
+  const textTertiary = theme === 'dark' ? 'rgba(255, 255, 255, 0.7)' : '#6b7280';
+  const cardBg = theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0.6)';
+  const cardBorder = theme === 'dark' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(124, 58, 237, 0.2)';
+  const statBg = theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0.7)';
+>>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
 
   return (
     <section
       id="about"
       className="py-20 px-4 relative overflow-hidden transition-all duration-500"
+<<<<<<< HEAD
       style={{ background: styles.bgGradient }}
     >
       {/* Three.js 3D Background optimizado */}
@@ -235,6 +322,34 @@ export default function About() {
           </Canvas>
         </div>
       )}
+=======
+      style={{ background: bgGradient }}
+    >
+      {/* Three.js 3D Background */}
+      <div className={`absolute inset-0 transition-opacity duration-500 ${theme === 'dark' ? 'opacity-80' : 'opacity-60'}`}>
+        <Canvas 
+          camera={{ position: [0, 0, 8], fov: 75 }}
+          gl={{ alpha: true, antialias: true }}
+          dpr={[1, 2]}
+        >
+          <ambientLight intensity={theme === 'dark' ? 0.8 : 1.2} />
+          <directionalLight position={[10, 10, 5]} intensity={theme === 'dark' ? 1.5 : 2} />
+          <pointLight position={[-10, -10, -5]} intensity={1} color={theme === 'dark' ? '#7C3AED' : '#9333EA'} />
+          <pointLight position={[10, 10, 5]} intensity={1} color={theme === 'dark' ? '#EC4899' : '#F472B6'} />
+          <Suspense fallback={null}>
+            <AnimatedRings />
+          </Suspense>
+          <OrbitControls
+            enableZoom={false}
+            enablePan={false}
+            autoRotate
+            autoRotateSpeed={0.5}
+            maxPolarAngle={Math.PI / 2}
+            minPolarAngle={Math.PI / 2}
+          />
+        </Canvas>
+      </div>
+>>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
 
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Section Title */}
@@ -248,7 +363,13 @@ export default function About() {
           <h2
             className="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent"
             style={{
+<<<<<<< HEAD
               backgroundImage: styles.titleGradient,
+=======
+              backgroundImage: theme === 'dark'
+                ? 'linear-gradient(135deg, #00D9FF 0%, #7C3AED 30%, #EC4899 60%, #F59E0B 100%)'
+                : 'linear-gradient(135deg, #06B6D4 0%, #9333EA 30%, #F472B6 60%, #F59E0B 100%)',
+>>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent'
             }}
@@ -258,7 +379,13 @@ export default function About() {
           <motion.div
             className="w-32 h-1.5 mx-auto rounded-full relative overflow-hidden"
             style={{
+<<<<<<< HEAD
               background: styles.underlineGradient
+=======
+              background: theme === 'dark'
+                ? 'linear-gradient(90deg, #00D9FF 0%, #7C3AED 50%, #EC4899 100%)'
+                : 'linear-gradient(90deg, #06B6D4 0%, #9333EA 50%, #F472B6 100%)'
+>>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
             }}
             initial={{ width: 0 }}
             whileInView={{ width: 128 }}
@@ -289,10 +416,17 @@ export default function About() {
             <motion.div
               className="w-full h-96 rounded-2xl shadow-2xl flex items-center justify-center overflow-hidden backdrop-blur-sm transition-all duration-300"
               style={{
+<<<<<<< HEAD
                 backgroundColor: styles.cardBg,
                 borderWidth: '1px',
                 borderStyle: 'solid',
                 borderColor: styles.cardBorder
+=======
+                backgroundColor: cardBg,
+                borderWidth: '1px',
+                borderStyle: 'solid',
+                borderColor: cardBorder
+>>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
               }}
               whileHover={{ scale: 1.02, rotate: 1 }}
               transition={{ duration: 0.3 }}
@@ -303,11 +437,21 @@ export default function About() {
                   style={{
                     borderWidth: '8px',
                     borderStyle: 'solid',
+<<<<<<< HEAD
                     borderColor: styles.cardBorder
+=======
+                    borderColor: cardBorder
+>>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
                   }}
                 >
                   <span className="text-8xl">👨‍💻</span>
                 </div>
+<<<<<<< HEAD
+=======
+                <p className="text-sm" style={{ color: textSecondary }}>
+                  Agrega tu foto aquí
+                </p>
+>>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
               </div>
             </motion.div>
 
@@ -340,16 +484,29 @@ export default function About() {
             <div 
               className="p-8 rounded-2xl backdrop-blur-sm shadow-xl transition-all duration-300"
               style={{
+<<<<<<< HEAD
                 backgroundColor: styles.cardBg,
                 borderWidth: '1px',
                 borderStyle: 'solid',
                 borderColor: styles.cardBorder
+=======
+                backgroundColor: cardBg,
+                borderWidth: '1px',
+                borderStyle: 'solid',
+                borderColor: cardBorder
+>>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
               }}
             >
               <h3
                 className="text-3xl font-bold mb-6 bg-clip-text text-transparent"
                 style={{
+<<<<<<< HEAD
                   backgroundImage: styles.titleGradient,
+=======
+                  backgroundImage: theme === 'dark'
+                    ? 'linear-gradient(135deg, #00D9FF 0%, #7C3AED 50%, #EC4899 100%)'
+                    : 'linear-gradient(135deg, #06B6D4 0%, #9333EA 50%, #F472B6 100%)',
+>>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent'
                 }}
@@ -362,7 +519,11 @@ export default function About() {
                   <p 
                     key={index}
                     className="text-lg leading-relaxed transition-colors duration-300"
+<<<<<<< HEAD
                     style={{ color: index === 0 ? styles.textSecondary : styles.textTertiary }}
+=======
+                    style={{ color: index === 0 ? textSecondary : textTertiary }}
+>>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
                   >
                     {paragraph}
                   </p>
@@ -378,15 +539,30 @@ export default function About() {
               viewport={{ once: true }}
               transition={{ delay: 0.3, duration: 0.6 }}
             >
+<<<<<<< HEAD
               {stats.map((stat, index) => (
+=======
+              {[
+                { value: '2', label: t('about.stats.experience') },
+                { value: '10+', label: t('about.stats.projects') },
+                { value: '100%', label: t('about.stats.dedication') }
+              ].map((stat, index) => (
+>>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
                 <motion.div
                   key={stat.label}
                   className="text-center p-4 rounded-xl backdrop-blur-sm shadow-lg transition-all duration-300"
                   style={{
+<<<<<<< HEAD
                     backgroundColor: styles.statBg,
                     borderWidth: '1px',
                     borderStyle: 'solid',
                     borderColor: styles.cardBorder
+=======
+                    backgroundColor: statBg,
+                    borderWidth: '1px',
+                    borderStyle: 'solid',
+                    borderColor: theme === 'dark' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(124, 58, 237, 0.3)'
+>>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
                   }}
                   whileHover={{ 
                     scale: 1.1,
@@ -397,7 +573,11 @@ export default function About() {
                 >
                   <motion.div
                     className="text-3xl font-bold"
+<<<<<<< HEAD
                     style={{ color: styles.textPrimary }}
+=======
+                    style={{ color: textPrimary }}
+>>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
                     initial={{ scale: 0 }}
                     whileInView={{ scale: 1 }}
                     viewport={{ once: true }}
@@ -405,7 +585,11 @@ export default function About() {
                   >
                     {stat.value}
                   </motion.div>
+<<<<<<< HEAD
                   <div className="text-sm" style={{ color: styles.textTertiary }}>
+=======
+                  <div className="text-sm" style={{ color: textTertiary }}>
+>>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
                     {stat.label}
                   </div>
                 </motion.div>
@@ -437,6 +621,7 @@ export default function About() {
               }}
               className="p-6 rounded-xl shadow-lg cursor-pointer backdrop-blur-sm transition-all duration-300"
               style={{
+<<<<<<< HEAD
                 backgroundColor: styles.cardBg,
                 borderWidth: '1px',
                 borderStyle: 'solid',
@@ -450,6 +635,21 @@ export default function About() {
                 {item.title}
               </h4>
               <p className="text-sm" style={{ color: styles.textTertiary }}>
+=======
+                backgroundColor: cardBg,
+                borderWidth: '1px',
+                borderStyle: 'solid',
+                borderColor: cardBorder
+              }}
+            >
+              <div className="mb-4" style={{ color: textPrimary }}>
+                {item.icon}
+              </div>
+              <h4 className="text-xl font-semibold mb-2" style={{ color: textPrimary }}>
+                {item.title}
+              </h4>
+              <p className="text-sm" style={{ color: textTertiary }}>
+>>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
                 {item.description}
               </p>
             </motion.div>

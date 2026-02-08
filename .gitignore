@@ -32,7 +32,10 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+<<<<<<< HEAD
 .env.local
+=======
+>>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
 
 # vercel
 .vercel

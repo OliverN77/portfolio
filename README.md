@@ -14,7 +14,11 @@ Un portafolio web moderno y responsivo construido con Next.js 16, TypeScript, y 
   - Hero con presentación animada
   - Sobre mí
   - Habilidades técnicas
+<<<<<<< HEAD
   - Proyectos destacados`
+=======
+  - Proyectos destacados
+>>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
   - Formulario de contacto
   - Footer
 
@@ -32,7 +36,11 @@ Un portafolio web moderno y responsivo construido con Next.js 16, TypeScript, y 
 
 1. **Clonar el repositorio**
 ```bash
+<<<<<<< HEAD
 git clone https://github.com/tu-usuario/portafolio.git
+=======
+git clone https://github.com/OliverN77/portfolio.git
+>>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
 cd portafolio
 ```
 
@@ -114,7 +122,11 @@ Los componentes en [components/sections/](components/sections/) contienen la inf
 2. Vercel detectará automáticamente Next.js y configurará todo
 3. Tu sitio estará en línea en minutos
 
+<<<<<<< HEAD
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/OliverN77/portafolio)
+=======
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=[https://github.com/OliverN77/portfolio.git])
+>>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
 
 ### Otras opciones
 
@@ -130,7 +142,11 @@ Este proyecto es de código abierto y está disponible bajo la [Licencia MIT](LI
 
 Oliver - [olivernie2626@gmail.com](mailto:olivernie2626@gmail.com)
 
+<<<<<<< HEAD
 Link del proyecto: [https://github.com/OliverN77/portafolio](https://github.com/OliverN77/portafolio)
+=======
+Link del proyecto: [https://github.com/OliverN77/portfolio.git](https://github.com/OliverN77/portfolio.git)
+>>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
 
 ---
 
