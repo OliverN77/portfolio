@@ -1,0 +1,107 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    /* Footer variables */
+    --bg-footer: 255 255 255;
+    --text-footer: 23 23 23;
+    --text-footer-secondary: 75 85 99;
+    --bg-footer-card: 243 232 255;
+    --text-footer-card: 88 28 135;
+    
+    /* Navbar variables */
+    --bg-navbar-scrolled: 255 255 255;
+    --text-navbar-scrolled: 23 23 23;
+    --bg-navbar-button: 255 255 255;
+    --text-navbar-button: 23 23 23;
+    --border-navbar: 229 231 235;
+  }
+
+  .dark {
+    /* Footer variables */
+    --bg-footer: 0 0 0;
+    --text-footer: 255 255 255;
+    --text-footer-secondary: 156 163 175;
+    --bg-footer-card: 31 41 55;
+    --text-footer-card: 209 213 219;
+    
+    /* Navbar variables */
+    --bg-navbar-scrolled: 17 24 39;
+    --text-navbar-scrolled: 255 255 255;
+    --bg-navbar-button: 31 41 55;
+    --text-navbar-button: 255 255 255;
+    --border-navbar: 55 65 81;
+  }
+
+  body {
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .animate-blob {
+    animation: blob 7s infinite;
+  }
+  
+  .animation-delay-2000 {
+    animation-delay: 2s;
+  }
+  
+  .animation-delay-4000 {
+    animation-delay: 4s;
+  }
+}
+
+/* Animations */
+@keyframes blob {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #555;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #777;
+}
