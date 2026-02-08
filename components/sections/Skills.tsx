@@ -2,7 +2,6 @@
 
 import { motion } from 'framer-motion';
 import { Code, Database, Palette, Globe, Server, Smartphone } from 'lucide-react';
-<<<<<<< HEAD
 import dynamic from 'next/dynamic';
 import { memo, useMemo, useState, useEffect } from 'react';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -75,22 +74,6 @@ const AnimatedCubes = memo(({ theme, isMobile }: { theme: string; isMobile: bool
     // Menos cubos en móviles
     showAllCubes: !isMobile
   }), [isMobile, theme]);
-=======
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Float, Box, MeshDistortMaterial, Stars } from '@react-three/drei';
-import { Suspense } from 'react';
-import { useTheme } from '@/contexts/ThemeContext';
-import { useLanguage } from '@/contexts/LanguageContext';
-
-// Componente 3D para Skills - Cubos flotantes
-function AnimatedCubes() {
-  const { theme } = useTheme();
-
-  // Colores según el tema
-  const colors = theme === 'dark' 
-    ? ['#00D9FF', '#7C3AED', '#EC4899', '#F59E0B']
-    : ['#06B6D4', '#9333EA', '#F472B6', '#F59E0B'];
->>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
 
   return (
     <>
@@ -98,39 +81,27 @@ function AnimatedCubes() {
       <Stars 
         radius={100} 
         depth={50} 
-<<<<<<< HEAD
         count={config.starsCount}
-=======
-        count={theme === 'dark' ? 3000 : 2000} 
->>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
         factor={4} 
         saturation={theme === 'dark' ? 0 : 0.4} 
         fade 
         speed={1} 
       />
 
-<<<<<<< HEAD
       {/* Cubo principal - siempre visible */}
-=======
->>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
       <Float speed={2} rotationIntensity={0.8} floatIntensity={1.5}>
         <Box args={[1, 1, 1]} position={[0, 0, 0]}>
           <MeshDistortMaterial
             color={colors[0]}
             attach="material"
             distort={0.4}
-<<<<<<< HEAD
             speed={config.distortSpeed}
-=======
-            speed={2}
->>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
             roughness={0.1}
             metalness={0.8}
           />
         </Box>
       </Float>
 
-<<<<<<< HEAD
       {/* Cubos adicionales - solo en desktop/tablet */}
       {config.showAllCubes && (
         <>
@@ -179,62 +150,14 @@ function AnimatedCubes() {
 });
 
 AnimatedCubes.displayName = 'AnimatedCubes';
-=======
-      <Float speed={1.5} rotationIntensity={0.6} floatIntensity={1.2}>
-        <Box args={[0.8, 0.8, 0.8]} position={[2, 1, -1]} rotation={[0.5, 0.5, 0]}>
-          <MeshDistortMaterial
-            color={colors[1]}
-            attach="material"
-            distort={0.3}
-            speed={1.5}
-            roughness={0.1}
-            metalness={0.8}
-          />
-        </Box>
-      </Float>
-
-      <Float speed={1.8} rotationIntensity={0.7} floatIntensity={1.3}>
-        <Box args={[0.6, 0.6, 0.6]} position={[-2, -0.5, 0]} rotation={[0.3, 0.8, 0.2]}>
-          <MeshDistortMaterial
-            color={colors[2]}
-            attach="material"
-            distort={0.5}
-            speed={1.8}
-            roughness={0.1}
-            metalness={0.8}
-          />
-        </Box>
-      </Float>
-
-      <Float speed={2.2} rotationIntensity={0.9} floatIntensity={1.6}>
-        <Box args={[0.5, 0.5, 0.5]} position={[1, -1.5, 1]} rotation={[0.8, 0.3, 0.5]}>
-          <MeshDistortMaterial
-            color={colors[3]}
-            attach="material"
-            distort={0.6}
-            speed={2.2}
-            roughness={0.1}
-            metalness={0.8}
-          />
-        </Box>
-      </Float>
-    </>
-  );
-}
->>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
 
 export default function Skills() {
   const { theme } = useTheme();
   const { t } = useLanguage();
-<<<<<<< HEAD
   const isMobile = useIsMobile();
 
   // Memoizar skillCategories para evitar recreación
   const skillCategories = useMemo(() => [
-=======
-
-  const skillCategories = [
->>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
     {
       category: 'Frontend',
       icon: <Code className="w-6 h-6" />,
@@ -275,7 +198,6 @@ export default function Skills() {
         { name: 'CI/CD', level: 75 },
       ],
     },
-<<<<<<< HEAD
   ], []);
 
   // Tecnologías de aprendizaje memoizadas
@@ -307,29 +229,11 @@ export default function Skills() {
       ? 'linear-gradient(90deg, #7C3AED 0%, #00D9FF 100%)'
       : 'linear-gradient(90deg, #9333EA 0%, #06B6D4 100%)'
   }), [theme]);
-=======
-  ];
-
-  // Colores dinámicos según el tema
-  const bgGradient = theme === 'dark'
-    ? 'linear-gradient(to bottom, rgba(17, 24, 39, 0.85) 0%, rgba(31, 41, 55, 0.8) 100%)'
-    : 'linear-gradient(to bottom, rgba(249, 250, 251, 0.85) 0%, rgba(255, 255, 255, 0.8) 100%)';
-
-  const textPrimary = theme === 'dark' ? '#ffffff' : '#111827';
-  const textSecondary = theme === 'dark' ? '#d1d5db' : '#4b5563';
-  const cardBg = theme === 'dark' ? 'rgba(31, 41, 55, 0.5)' : 'rgba(255, 255, 255, 1)';
-  const cardBorder = theme === 'dark' ? 'rgba(75, 85, 99, 0.5)' : 'rgba(229, 231, 235, 1)';
-  const iconBg = theme === 'dark' ? '#7c3aed' : '#9333ea';
-  const progressBg = theme === 'dark' ? '#374151' : '#e5e7eb';
-  const ctaBg = theme === 'dark' ? '#7c3aed' : '#9333ea';
-  const badgeBg = theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0.3)';
->>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
 
   return (
     <section 
       id="skills" 
       className="py-20 px-4 relative overflow-hidden transition-all duration-500"
-<<<<<<< HEAD
       style={{ background: styles.bgGradient }}
     >
       {/* Three.js 3D Background optimizado */}
@@ -363,28 +267,6 @@ export default function Skills() {
           </Canvas>
         </div>
       )}
-=======
-      style={{ background: bgGradient }}
-    >
-      {/* Three.js 3D Background - Cubos flotantes */}
-      <div className={`absolute inset-0 transition-opacity duration-500 ${theme === 'dark' ? 'opacity-40' : 'opacity-30'}`}>
-        <Canvas camera={{ position: [0, 0, 7], fov: 75 }}>
-          <ambientLight intensity={theme === 'dark' ? 1 : 1.5} />
-          <directionalLight position={[10, 10, 5]} intensity={theme === 'dark' ? 2 : 2.5} />
-          <pointLight position={[-10, -10, -5]} intensity={1.2} color={theme === 'dark' ? '#7C3AED' : '#9333EA'} />
-          <pointLight position={[10, -10, 5]} intensity={1} color={theme === 'dark' ? '#EC4899' : '#F472B6'} />
-          <Suspense fallback={null}>
-            <AnimatedCubes />
-          </Suspense>
-          <OrbitControls 
-            enableZoom={false} 
-            enablePan={false}
-            autoRotate 
-            autoRotateSpeed={0.4}
-          />
-        </Canvas>
-      </div>
->>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
 
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Section Title */}
@@ -398,13 +280,7 @@ export default function Skills() {
           <motion.h2 
             className="text-5xl md:text-6xl font-bold mb-4 bg-clip-text text-transparent"
             style={{ 
-<<<<<<< HEAD
               backgroundImage: styles.titleGradient,
-=======
-              backgroundImage: theme === 'dark'
-                ? 'linear-gradient(135deg, #00D9FF 0%, #7C3AED 30%, #EC4899 60%, #F59E0B 100%)'
-                : 'linear-gradient(135deg, #06B6D4 0%, #9333EA 30%, #F472B6 60%, #F59E0B 100%)',
->>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent'
             }}
@@ -417,13 +293,7 @@ export default function Skills() {
           <motion.div 
             className="w-32 h-1.5 mx-auto rounded-full relative overflow-hidden"
             style={{ 
-<<<<<<< HEAD
               background: styles.underlineGradient
-=======
-              background: theme === 'dark'
-                ? 'linear-gradient(90deg, #00D9FF 0%, #7C3AED 50%, #EC4899 100%)'
-                : 'linear-gradient(90deg, #06B6D4 0%, #9333EA 50%, #F472B6 100%)'
->>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
             }}
             initial={{ width: 0 }}
             whileInView={{ width: 128 }}
@@ -448,11 +318,7 @@ export default function Skills() {
           
           <motion.p 
             className="mt-6 text-lg max-w-2xl mx-auto font-medium transition-colors duration-300"
-<<<<<<< HEAD
             style={{ color: styles.textSecondary }}
-=======
-            style={{ color: textSecondary }}
->>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
@@ -478,17 +344,10 @@ export default function Skills() {
               }}
               className="p-6 rounded-2xl shadow-lg transition-all duration-300"
               style={{
-<<<<<<< HEAD
                 backgroundColor: styles.cardBg,
                 borderWidth: '1px',
                 borderStyle: 'solid',
                 borderColor: styles.cardBorder
-=======
-                backgroundColor: cardBg,
-                borderWidth: '1px',
-                borderStyle: 'solid',
-                borderColor: cardBorder
->>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
               }}
               whileHover={{
                 scale: 1.02,
@@ -503,21 +362,13 @@ export default function Skills() {
               >
                 <div 
                   className="p-3 rounded-lg text-white transition-colors duration-300"
-<<<<<<< HEAD
                   style={{ backgroundColor: styles.iconBg }}
-=======
-                  style={{ backgroundColor: iconBg }}
->>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
                 >
                   {category.icon}
                 </div>
                 <h3 
                   className="text-2xl font-bold transition-colors duration-300"
-<<<<<<< HEAD
                   style={{ color: styles.textPrimary }}
-=======
-                  style={{ color: textPrimary }}
->>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
                 >
                   {category.category}
                 </h3>
@@ -530,21 +381,13 @@ export default function Skills() {
                     <div className="flex justify-between mb-2">
                       <span 
                         className="text-sm font-medium transition-colors duration-300"
-<<<<<<< HEAD
                         style={{ color: styles.textSecondary }}
-=======
-                        style={{ color: textSecondary }}
->>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
                       >
                         {skill.name}
                       </span>
                       <motion.span 
                         className="text-sm font-semibold transition-colors duration-300"
-<<<<<<< HEAD
                         style={{ color: styles.iconBg }}
-=======
-                        style={{ color: iconBg }}
->>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
                         initial={{ opacity: 0 }}
                         whileInView={{ opacity: 1 }}
                         viewport={{ once: true }}
@@ -557,22 +400,12 @@ export default function Skills() {
                     {/* Progress Bar */}
                     <div 
                       className="w-full h-2 rounded-full overflow-hidden transition-colors duration-300"
-<<<<<<< HEAD
                       style={{ backgroundColor: styles.progressBg }}
-=======
-                      style={{ backgroundColor: progressBg }}
->>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
                     >
                       <motion.div
                         className="h-full rounded-full relative"
                         style={{
-<<<<<<< HEAD
                           background: styles.progressGradient
-=======
-                          background: theme === 'dark'
-                            ? 'linear-gradient(90deg, #7C3AED 0%, #00D9FF 100%)'
-                            : 'linear-gradient(90deg, #9333EA 0%, #06B6D4 100%)'
->>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
                         }}
                         initial={{ width: 0 }}
                         whileInView={{ width: `${skill.level}%` }}
@@ -614,11 +447,7 @@ export default function Skills() {
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.3 }}
           className="mt-16 text-center p-8 rounded-2xl shadow-lg transition-colors duration-300"
-<<<<<<< HEAD
           style={{ backgroundColor: styles.ctaBg }}
-=======
-          style={{ backgroundColor: ctaBg }}
->>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
         >
           <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">
             {t('skills.learning.title')}
@@ -633,19 +462,11 @@ export default function Skills() {
             viewport={{ once: true }}
             transition={{ delay: 0.5 }}
           >
-<<<<<<< HEAD
             {learningTechs.map((tech, index) => (
               <motion.span
                 key={tech}
                 className="px-4 py-2 backdrop-blur-sm rounded-full text-white text-sm font-medium transition-colors duration-300"
                 style={{ backgroundColor: styles.badgeBg }}
-=======
-            {['GraphQL', 'Three.js', 'WebGL', 'AI/ML', 'Blockchain'].map((tech, index) => (
-              <motion.span
-                key={tech}
-                className="px-4 py-2 backdrop-blur-sm rounded-full text-white text-sm font-medium transition-colors duration-300"
-                style={{ backgroundColor: badgeBg }}
->>>>>>> 5d42b2d674391f40d89be814cd669304af02e453
                 initial={{ opacity: 0, scale: 0.8 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
