@@ -40,11 +40,13 @@ const Stars = dynamic(
   { ssr: false }
 );
 
-// Hook para detectar dispositivos móviles
+// Hook para detectar dispositivos móviles (evita hidratación)
 function useIsMobile() {
   const [isMobile, setIsMobile] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
@@ -54,7 +56,7 @@ function useIsMobile() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  return isMobile;
+  return mounted ? isMobile : false;
 }
 
 // Componente 3D optimizado con memoización
