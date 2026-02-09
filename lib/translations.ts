@@ -103,7 +103,7 @@ export const translations = {
             quickLinks: 'Enlaces Rápidos',
             availability: 'Disponible para proyectos freelance',
             copyright: '© {year} Oliver Nieto. Hecho con',
-            and: 'y React',
+            and: 'y Next.js',
             backToTop: 'Volver arriba'
         }
     },
@@ -211,7 +211,7 @@ export const translations = {
             quickLinks: 'Quick Links',
             availability: 'Available for freelance projects',
             copyright: '© {year} Oliver Nieto. Made with',
-            and: 'and React',
+            and: 'and Next.js',
             backToTop: 'Back to top'
         }
     },
@@ -318,7 +318,7 @@ export const translations = {
             quickLinks: 'Schnelllinks',
             availability: 'Verfügbar für Freelance-Projekte',
             copyright: '© {year} Oliver Nieto. Gemacht mit',
-            and: 'und React',
+            and: 'und Next.js',
             backToTop: 'Zurück nach oben'
         }
     },
@@ -425,7 +425,7 @@ export const translations = {
             quickLinks: 'Link Rapidi',
             availability: 'Disponibile per progetti freelance',
             copyright: '© {year} Oliver Nieto. Fatto con',
-            and: 'e React',
+            and: 'e Next.js',
             backToTop: 'Torna su'
         }
     }
