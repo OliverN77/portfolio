@@ -168,7 +168,7 @@ export default function Projects() {
       image: '/motos.png',
       tags: ['Python', 'HTML', 'CSS'],
       github: 'https://github.com/OliverN77/Motos',
-      demo: 'https://following-diandra-olivern77-d65584c0.koyeb.app/',
+      demo: 'https://motos-xi.vercel.app/',
       color: theme === 'dark' ? '#00D9FF' : '#22D3EE'
     },
     {
