@@ -370,22 +370,6 @@ export default function Hero() {
             >
               {t('hero.contactMe')}
             </motion.a>
-            <motion.a
-              href="/cv-oliver-nieto.pdf"
-              download
-              className="w-full sm:w-auto px-8 py-4 rounded-full font-semibold text-lg shadow-lg transition-all duration-300"
-              style={{
-                backgroundColor: styles.buttonBg,
-                color: styles.buttonText
-              }}
-              whileHover={{ scale: 1.05, boxShadow: "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)" }}
-              whileTap={{ scale: 0.95 }}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 1.3 }}
-            >
-              {t('hero.downloadCv')}
-            </motion.a>
           </motion.div>
 
           {/* Social Links */}

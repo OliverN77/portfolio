@@ -17,7 +17,6 @@ export const translations = {
             description: 'Creando experiencias web modernas y funcionales con las últimas tecnologías. Apasionado por el diseño limpio y el código eficiente.',
             viewProjects: 'Ver Proyectos',
             contactMe: 'Contáctame',
-            downloadCv: 'Descargar CV'
         },
         about: {
             title: 'Sobre mí',
@@ -171,7 +170,6 @@ export const translations = {
             description: 'Creating modern and functional web experiences with the latest technologies. Passionate about clean design and efficient code.',
             viewProjects: 'View Projects',
             contactMe: 'Contact Me',
-            downloadCv: 'Download CV'
         },
         about: {
             title: 'About Me',
@@ -321,7 +319,6 @@ export const translations = {
             description: 'Ich erstelle moderne und funktionale Web-Erlebnisse mit den neuesten Technologien. Leidenschaftlich für sauberes Design und effizienten Code.',
             viewProjects: 'Projekte ansehen',
             contactMe: 'Kontaktiere mich',
-            downloadCv: 'Lebenslauf herunterladen'
         },
         about: {
             title: 'Über mich',
@@ -471,7 +468,6 @@ export const translations = {
             description: 'Creo esperienze web moderne e funzionali con le ultime tecnologie. Appassionato di design pulito e codice efficiente.',
             viewProjects: 'Vedi Progetti',
             contactMe: 'Contattami',
-            downloadCv: 'Scarica CV'
         },
         about: {
             title: 'Chi sono',
