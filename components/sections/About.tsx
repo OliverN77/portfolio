@@ -1,11 +1,13 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
 import { Code2, Palette, Zap, Heart } from 'lucide-react';
 import dynamic from 'next/dynamic';
-import { memo, useMemo, useState, useEffect } from 'react';
+import Image from 'next/image';
+import { memo, useMemo, useRef, useState, useEffect, JSXElementConstructor, Key, ReactElement, ReactNode, ReactPortal } from 'react';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useIsMobile } from '@/hooks/useIsMobile';
 
 // Lazy load componentes 3D para mejor rendimiento
 const Canvas = dynamic(
@@ -37,25 +39,6 @@ const Stars = dynamic(
   () => import('@react-three/drei').then((mod) => mod.Stars),
   { ssr: false }
 );
-
-// Hook para detectar dispositivos móviles (evita hidratación)
-function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(false);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  return mounted ? isMobile : false;
-}
 
 // Componente 3D optimizado con memoización
 const AnimatedRings = memo(({ theme, isMobile }: { theme: string; isMobile: boolean }) => {
@@ -142,6 +125,35 @@ const AnimatedRings = memo(({ theme, isMobile }: { theme: string; isMobile: bool
 
 AnimatedRings.displayName = 'AnimatedRings';
 
+function AnimatedNumber({ target, suffix = '' }: { target: number; suffix?: string }) {
+  const [count, setCount] = useState(0);
+  const ref = useRef<HTMLSpanElement | null>(null);
+  const isInView = useInView(ref, { once: true });
+
+  useEffect(() => {
+    if (!isInView) return;
+    let start = 0;
+    const step = Math.ceil(target / 40);
+    const timer = setInterval(() => {
+      start += step;
+      if (start >= target) {
+        setCount(target);
+        clearInterval(timer);
+      } else {
+        setCount(start);
+      }
+    }, 40);
+    return () => clearInterval(timer);
+  }, [isInView, target]);
+
+  return (
+    <span ref={ref}>
+      {count}
+      {suffix}
+    </span>
+  );
+}
+
 export default function About() {
   const { theme } = useTheme();
   const { t } = useLanguage();
@@ -173,9 +185,27 @@ export default function About() {
 
   // Stats memoizados
   const stats = useMemo(() => [
-    { value: '2', label: t('about.stats.experience') },
-    { value: '10+', label: t('about.stats.projects') },
-    { value: '100%', label: t('about.stats.dedication') }
+    { value: <AnimatedNumber target={2} />, label: t('about.stats.experience') },
+    { value: <><AnimatedNumber target={10} />+</>, label: t('about.stats.projects') },
+    { value: <AnimatedNumber target={100} suffix="%" />, label: t('about.stats.dedication') }
+  ], [t]);
+
+  const timelineItems = useMemo(() => [
+    {
+      title: t('about.timeline.items.0.title'),
+      description: t('about.timeline.items.0.description'),
+      date: t('about.timeline.items.0.date')
+    },
+    {
+      title: t('about.timeline.items.1.title'),
+      description: t('about.timeline.items.1.description'),
+      date: t('about.timeline.items.1.date')
+    },
+    {
+      title: t('about.timeline.items.2.title'),
+      description: t('about.timeline.items.2.description'),
+      date: t('about.timeline.items.2.date')
+    }
   ], [t]);
 
   // Colores dinámicos memoizados
@@ -188,6 +218,7 @@ export default function About() {
     textTertiary: theme === 'dark' ? 'rgba(255, 255, 255, 0.7)' : '#6b7280',
     cardBg: theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0.6)',
     cardBorder: theme === 'dark' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(124, 58, 237, 0.2)',
+    iconBg: theme === 'dark' ? '#7C3AED' : '#9333EA',
     statBg: theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0.7)',
     titleGradient: theme === 'dark'
       ? 'linear-gradient(135deg, #00D9FF 0%, #7C3AED 30%, #EC4899 60%, #F59E0B 100%)'
@@ -308,7 +339,15 @@ export default function About() {
                     borderColor: styles.cardBorder
                   }}
                 >
-                  <span className="text-8xl">👨‍💻</span>
+                    <div className="relative w-44 h-44 rounded-full overflow-hidden">
+                      <Image
+                        src="/oliver.jpg"
+                        alt="Oliver Nieto"
+                        fill
+                        className="object-cover"
+                        priority
+                      />
+                    </div>
                 </div>
               </div>
             </motion.div>
@@ -360,7 +399,7 @@ export default function About() {
               </h3>
 
               <div className="space-y-4">
-                {t('about.description').split('\n\n').map((paragraph, index) => (
+                {t('about.description').split('\n\n').map((paragraph: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined, index: Key | null | undefined) => (
                   <p 
                     key={index}
                     className="text-lg leading-relaxed transition-colors duration-300"
@@ -457,6 +496,52 @@ export default function About() {
             </motion.div>
           ))}
         </div>
+
+        {/* Timeline */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="mt-20"
+        >
+          <h3
+            className="text-3xl font-bold mb-8 text-center"
+            style={{ color: styles.textPrimary }}
+          >
+            {t('about.timeline.title')}
+          </h3>
+          <div className="relative max-w-3xl mx-auto">
+            <div className="absolute left-3 top-0 bottom-0 w-px" style={{ backgroundColor: styles.cardBorder }} />
+            <div className="space-y-8">
+              {timelineItems.map((item, index) => (
+                <div key={item.title} className="relative pl-10">
+                  <div
+                    className="absolute left-0 top-1.5 w-6 h-6 rounded-full"
+                    style={{ backgroundColor: styles.iconBg }}
+                  />
+                  <div
+                    className="p-6 rounded-2xl shadow-lg backdrop-blur-sm"
+                    style={{ backgroundColor: styles.cardBg, border: `1px solid ${styles.cardBorder}` }}
+                  >
+                    <p className="text-sm font-semibold mb-2" style={{ color: styles.textTertiary }}>
+                      {item.date}
+                    </p>
+                    <h4 className="text-xl font-semibold" style={{ color: styles.textPrimary }}>
+                      {item.title}
+                    </h4>
+                    <p className="text-sm mt-2" style={{ color: styles.textSecondary }}>
+                      {item.description}
+                    </p>
+                  </div>
+                  {index < timelineItems.length - 1 && (
+                    <div className="absolute left-3 -bottom-8 h-8 w-px" style={{ backgroundColor: styles.cardBorder }} />
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </motion.div>
       </div>
     </section>
   );

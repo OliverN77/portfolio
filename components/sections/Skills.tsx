@@ -1,11 +1,31 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Code, Database, Palette, Globe, Server, Smartphone } from 'lucide-react';
+import { Code, Database, Globe, Server } from 'lucide-react';
 import dynamic from 'next/dynamic';
-import { memo, useMemo, useState, useEffect } from 'react';
+import { memo, useMemo } from 'react';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useIsMobile } from '@/hooks/useIsMobile';
+import { VscAzure } from "react-icons/vsc";
+import { FaMicrosoft } from "react-icons/fa";
+import {
+  SiReact,
+  SiTypescript,
+  SiTailwindcss,
+  SiHtml5,
+  SiCss,
+  SiNodedotjs,
+  SiPhp,
+  SiPython,
+  SiMongodb,
+  SiPostgresql,
+  SiMysql,
+  SiDocker,
+  SiGithub,
+  SiFastapi
+} from 'react-icons/si';
+
 
 // Lazy load componentes 3D
 const Canvas = dynamic(
@@ -37,25 +57,6 @@ const Stars = dynamic(
   () => import('@react-three/drei').then((mod) => mod.Stars),
   { ssr: false }
 );
-
-// Hook para detectar dispositivos móviles (evita hidratación)
-function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(false);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  return mounted ? isMobile : false;
-}
 
 // Componente 3D optimizado con memoización
 const AnimatedCubes = memo(({ theme, isMobile }: { theme: string; isMobile: boolean }) => {
@@ -164,47 +165,52 @@ export default function Skills() {
       category: 'Frontend',
       icon: <Code className="w-6 h-6" />,
       skills: [
-        { name: 'React / Next.js', level: 90 },
-        { name: 'TypeScript', level: 85 },
-        { name: 'Tailwind CSS', level: 95 },
-        { name: 'HTML & CSS', level: 95 },
+        { name: 'React / Next.js', level: t('skills.levels.intermediate'), icon: <SiReact className="w-5 h-5" style={{ color: '#61DAFB' }} /> },
+        { name: 'TypeScript', level: t('skills.levels.basic'), icon: <SiTypescript className="w-5 h-5" style={{ color: '#3178C6' }} /> },
+        { name: 'Tailwind CSS', level: t('skills.levels.intermediate'), icon: <SiTailwindcss className="w-5 h-5" style={{ color: '#38BDF8' }} /> },
+        { name: 'HTML & CSS', level: t('skills.levels.advanced'), icon: (
+          <span className="flex items-center gap-1">
+            <SiHtml5 className="w-5 h-5" style={{ color: '#E34F26' }} />
+            <SiCss className="w-5 h-5" style={{ color: '#1572B6' }} />
+          </span>
+        ) }
       ],
     },
     {
       category: 'Backend',
       icon: <Server className="w-6 h-6" />,
       skills: [
-        { name: 'Node.js', level: 85 },
-        { name: 'PHP', level: 80 },
-        { name: 'Python', level: 75 },
-        { name: 'API REST', level: 90 },
+        { name: 'Node.js', level: t('skills.levels.intermediate'), icon: <SiNodedotjs className="w-5 h-5" style={{ color: '#68A063' }} /> },
+        { name: 'PHP', level: t('skills.levels.intermediate'), icon: <SiPhp className="w-5 h-5" style={{ color: '#777BB4' }} /> },
+        { name: 'Python', level: t('skills.levels.advanced'), icon: <SiPython className="w-5 h-5" style={{ color: '#3776AB' }} /> },
+        { name: 'API REST', level: t('skills.levels.intermediate'), icon: <SiFastapi className="w-5 h-5" style={{ color: '#00C5BA' }} /> }
       ],
     },
     {
       category: 'Database',
       icon: <Database className="w-6 h-6" />,
       skills: [
-        { name: 'MongoDB', level: 85 },
-        { name: 'PostgreSQL', level: 80 },
-        { name: 'SSMS', level: 75 },
-        { name: 'MySQL', level: 80 },
+        { name: 'MongoDB', level: t('skills.levels.basic'), icon: <SiMongodb className="w-5 h-5" style={{ color: '#47A248' }} /> },
+        { name: 'PostgreSQL', level: t('skills.levels.intermediate'), icon: <SiPostgresql className="w-5 h-5" style={{ color: '#336791' }} /> },
+        { name: 'SSMS', level: t('skills.levels.intermediate'), icon: <FaMicrosoft className="w-5 h-5" style={{ color: '#003B57' }} /> },
+        { name: 'MySQL', level: t('skills.levels.intermediate'), icon: <SiMysql className="w-5 h-5" style={{ color: '#4479A1' }} /> }
       ],
     },
     {
       category: 'DevOps',
       icon: <Globe className="w-6 h-6" />,
       skills: [
-        { name: 'Git & GitHub', level: 90 },
-        { name: 'Docker', level: 75 },
-        { name: 'AWS', level: 70 },
-        { name: 'CI/CD', level: 75 },
+        { name: 'Git & GitHub', level: t('skills.levels.intermediate'), icon: <SiGithub className="w-5 h-5" style={{ color: '#181717' }} /> },
+        { name: 'Docker', level: t('skills.levels.intermediate'), icon: <SiDocker className="w-5 h-5" style={{ color: '#2496ED' }} /> },
+        { name: 'Azure', level: t('skills.levels.basic'), icon: <VscAzure className="w-5 h-5" style={{ color: '#0078D4' }} /> },
+        { name: 'CI/CD', level: t('skills.levels.basic'), icon: <span className="w-5 h-5 rounded-full" style={{ backgroundColor: '#10B981' }} /> }
       ],
     },
-  ], []);
+  ], [t]);
 
   // Tecnologías de aprendizaje memoizadas
   const learningTechs = useMemo(() => 
-    ['GraphQL', 'Three.js', 'WebGL', 'AI/ML', 'Blockchain'],
+    ['GraphQL', 'WebGL', 'AI/ML', 'Blockchain'],
     []
   );
 
@@ -218,7 +224,6 @@ export default function Skills() {
     cardBg: theme === 'dark' ? 'rgba(31, 41, 55, 0.5)' : 'rgba(255, 255, 255, 1)',
     cardBorder: theme === 'dark' ? 'rgba(75, 85, 99, 0.5)' : 'rgba(229, 231, 235, 1)',
     iconBg: theme === 'dark' ? '#7c3aed' : '#9333ea',
-    progressBg: theme === 'dark' ? '#374151' : '#e5e7eb',
     ctaBg: theme === 'dark' ? '#7c3aed' : '#9333ea',
     badgeBg: theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0.3)',
     titleGradient: theme === 'dark'
@@ -227,9 +232,8 @@ export default function Skills() {
     underlineGradient: theme === 'dark'
       ? 'linear-gradient(90deg, #00D9FF 0%, #7C3AED 50%, #EC4899 100%)'
       : 'linear-gradient(90deg, #06B6D4 0%, #9333EA 50%, #F472B6 100%)',
-    progressGradient: theme === 'dark'
-      ? 'linear-gradient(90deg, #7C3AED 0%, #00D9FF 100%)'
-      : 'linear-gradient(90deg, #9333EA 0%, #06B6D4 100%)'
+    levelBg: theme === 'dark' ? 'rgba(124, 58, 237, 0.2)' : 'rgba(147, 51, 234, 0.15)',
+    levelText: theme === 'dark' ? '#e9d5ff' : '#6b21a8'
   }), [theme]);
 
   return (
@@ -380,60 +384,19 @@ export default function Skills() {
               <div className="space-y-4">
                 {category.skills.map((skill, skillIndex) => (
                   <div key={skill.name}>
-                    <div className="flex justify-between mb-2">
-                      <span 
-                        className="text-sm font-medium transition-colors duration-300"
-                        style={{ color: styles.textSecondary }}
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-3">
+                        <span className="flex items-center gap-2" style={{ color: styles.textSecondary }}>
+                          {skill.icon}
+                          <span className="text-sm font-medium">{skill.name}</span>
+                        </span>
+                      </div>
+                      <span
+                        className="text-xs font-semibold px-3 py-1 rounded-full"
+                        style={{ backgroundColor: styles.levelBg, color: styles.levelText }}
                       >
-                        {skill.name}
+                        {skill.level}
                       </span>
-                      <motion.span 
-                        className="text-sm font-semibold transition-colors duration-300"
-                        style={{ color: styles.iconBg }}
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: categoryIndex * 0.1 + skillIndex * 0.1 }}
-                      >
-                        {skill.level}%
-                      </motion.span>
-                    </div>
-                    
-                    {/* Progress Bar */}
-                    <div 
-                      className="w-full h-2 rounded-full overflow-hidden transition-colors duration-300"
-                      style={{ backgroundColor: styles.progressBg }}
-                    >
-                      <motion.div
-                        className="h-full rounded-full relative"
-                        style={{
-                          background: styles.progressGradient
-                        }}
-                        initial={{ width: 0 }}
-                        whileInView={{ width: `${skill.level}%` }}
-                        viewport={{ once: true }}
-                        transition={{ 
-                          duration: 1, 
-                          delay: categoryIndex * 0.1 + skillIndex * 0.1,
-                          ease: "easeOut"
-                        }}
-                      >
-                        {/* Shine effect */}
-                        <motion.div
-                          className="absolute inset-0"
-                          style={{
-                            background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent)'
-                          }}
-                          initial={{ x: '-100%' }}
-                          whileInView={{ x: '100%' }}
-                          viewport={{ once: true }}
-                          transition={{ 
-                            duration: 1.5, 
-                            delay: categoryIndex * 0.1 + skillIndex * 0.1 + 0.5,
-                            ease: "easeInOut"
-                          }}
-                        />
-                      </motion.div>
                     </div>
                   </div>
                 ))}

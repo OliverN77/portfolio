@@ -3,9 +3,12 @@
 import { motion } from 'framer-motion';
 import { ArrowDown, Github, Linkedin, Mail } from 'lucide-react';
 import dynamic from 'next/dynamic';
-import { memo, useMemo, useState, useEffect } from 'react';
+import Image from 'next/image';
+import { TypeAnimation } from 'react-type-animation';
+import { memo, useMemo } from 'react';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useIsMobile } from '@/hooks/useIsMobile';
 
 // Lazy load del Canvas 3D para mejor rendimiento inicial
 const Canvas = dynamic(
@@ -37,25 +40,6 @@ const Stars = dynamic(
   () => import('@react-three/drei').then((mod) => mod.Stars),
   { ssr: false }
 );
-
-// Hook para detectar si es móvil (evita hidratación)
-function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(false);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  return mounted ? isMobile : false;
-}
 
 // Componente 3D animado optimizado
 const AnimatedScene = memo(({ theme, isMobile }: { theme: string; isMobile: boolean }) => {
@@ -202,7 +186,7 @@ SocialLinks.displayName = 'SocialLinks';
 
 export default function Hero() {
   const { theme } = useTheme();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const isMobile = useIsMobile();
 
   const scrollToNextSection = () => {
@@ -211,6 +195,10 @@ export default function Hero() {
       aboutSection.scrollIntoView({ behavior: 'smooth' });
     }
   };
+
+  const roleSequence = useMemo(() => {
+    return t('hero.roleSequence');
+  }, [language, t]);
 
   // Colores dinámicos memoizados
   const styles = useMemo(() => ({
@@ -278,6 +266,26 @@ export default function Hero() {
           </motion.p>
 
           {/* Name */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.35 }}
+            className="mb-6"
+          >
+            <div
+              className="relative w-40 h-40 md:w-48 md:h-48 mx-auto rounded-full overflow-hidden border-4"
+              style={{ borderColor: styles.borderColor }}
+            >
+              <Image
+                src="/oliver.jpg"
+                alt="Oliver Nieto"
+                fill
+                className="object-cover"
+                priority
+              />
+            </div>
+          </motion.div>
+
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -289,19 +297,26 @@ export default function Hero() {
           </motion.h1>
 
           {/* Title/Role */}
-          <motion.h2
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
-            className="text-2xl md:text-4xl lg:text-5xl font-semibold mb-8 bg-clip-text text-transparent"
-            style={{
-              backgroundImage: styles.roleGradient,
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent'
-            }}
+            className="mb-8"
           >
-            {t('hero.role')}
-          </motion.h2>
+            <TypeAnimation
+              key={language}
+              sequence={roleSequence}
+              wrapper="h2"
+              speed={50}
+              repeat={Infinity}
+              className="text-2xl md:text-4xl lg:text-5xl font-semibold bg-clip-text text-transparent"
+              style={{
+                backgroundImage: styles.roleGradient,
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent'
+              }}
+            />
+          </motion.div>
 
           {/* Description */}
           <motion.p
@@ -354,6 +369,22 @@ export default function Hero() {
               transition={{ delay: 1.2 }}
             >
               {t('hero.contactMe')}
+            </motion.a>
+            <motion.a
+              href="/cv-oliver-nieto.pdf"
+              download
+              className="w-full sm:w-auto px-8 py-4 rounded-full font-semibold text-lg shadow-lg transition-all duration-300"
+              style={{
+                backgroundColor: styles.buttonBg,
+                color: styles.buttonText
+              }}
+              whileHover={{ scale: 1.05, boxShadow: "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)" }}
+              whileTap={{ scale: 0.95 }}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 1.3 }}
+            >
+              {t('hero.downloadCv')}
             </motion.a>
           </motion.div>
 

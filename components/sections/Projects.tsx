@@ -3,10 +3,13 @@
 import { motion } from 'framer-motion';
 import { ExternalLink, Github, Code2 } from 'lucide-react';
 import dynamic from 'next/dynamic';
-import { memo, useMemo, useState, useEffect } from 'react';
+import { memo, useMemo, useState, useRef } from 'react';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import Image from 'next/image';
+import { useIsMobile } from '@/hooks/useIsMobile';
+import { useFrame } from '@react-three/fiber';
+import * as THREE from 'three';
 
 // Lazy load componentes 3D
 const Canvas = dynamic(
@@ -19,128 +22,223 @@ const OrbitControls = dynamic(
   { ssr: false }
 );
 
-const Float = dynamic(
-  () => import('@react-three/drei').then((mod) => mod.Float),
-  { ssr: false }
-);
-
-const Sphere = dynamic(
-  () => import('@react-three/drei').then((mod) => mod.Sphere),
-  { ssr: false }
-);
-
-const MeshDistortMaterial = dynamic(
-  () => import('@react-three/drei').then((mod) => mod.MeshDistortMaterial),
-  { ssr: false }
-);
-
 const Stars = dynamic(
   () => import('@react-three/drei').then((mod) => mod.Stars),
   { ssr: false }
 );
 
-// Hook para detectar dispositivos móviles (evita hidratación)
-function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(false);
-  const [mounted, setMounted] = useState(false);
+// ── Planeta principal con anillo ──────────────────────────────────────────────
+const Planet = memo(({ theme }: { theme: string }) => {
+  const planetRef = useRef<THREE.Mesh>(null);
+  const ringRef   = useRef<THREE.Mesh>(null);
 
-  useEffect(() => {
-    setMounted(true);
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
+  useFrame(({ clock }) => {
+    const t = clock.getElapsedTime();
+    if (planetRef.current) {
+      planetRef.current.rotation.y = t * 0.15;
+    }
+    if (ringRef.current) {
+      ringRef.current.rotation.z = t * 0.05;
+    }
+  });
 
-  return mounted ? isMobile : false;
-}
+  const planetColor = theme === 'dark' ? '#1a3a6b' : '#2255aa';
+  const ringColor   = theme === 'dark' ? '#7C3AED' : '#9333EA';
 
-// Componente 3D optimizado con memoización
-const AnimatedSphere = memo(({ theme, isMobile }: { theme: string; isMobile: boolean }) => {
-  // Colores memoizados
-  const colors = useMemo(() => ({
-    primary: theme === 'dark' ? '#7C3AED' : '#9333EA',
-    secondary: theme === 'dark' ? '#EC4899' : '#F472B6',
-    accent: theme === 'dark' ? '#00D9FF' : '#22D3EE'
-  }), [theme]);
+  return (
+    <group>
+      {/* Planeta */}
+      <mesh ref={planetRef}>
+        <sphereGeometry args={[1.6, 64, 64]} />
+        <meshStandardMaterial
+          color={planetColor}
+          roughness={0.6}
+          metalness={0.4}
+          emissive={theme === 'dark' ? '#0d1f3c' : '#112244'}
+          emissiveIntensity={0.3}
+        />
+      </mesh>
 
-  // Configuración adaptativa según dispositivo
-  const config = useMemo(() => ({
-    // Reducir segmentos en móviles: 64 vs 100
-    segments: isMobile ? 32 : 64,
-    // Menos estrellas en móviles
-    starsCount: isMobile ? (theme === 'dark' ? 1200 : 800) : (theme === 'dark' ? 2500 : 1800),
-    // Animaciones más lentas en móviles
-    distortSpeed: isMobile ? 1 : 2,
-    // Menos esferas en móviles
-    showAllSpheres: !isMobile
-  }), [isMobile, theme]);
+      {/* Anillo tipo Saturno */}
+      <mesh ref={ringRef} rotation={[Math.PI / 3.5, 0, 0]}>
+        <torusGeometry args={[2.6, 0.22, 8, 120]} />
+        <meshStandardMaterial
+          color={ringColor}
+          roughness={0.3}
+          metalness={0.6}
+          transparent
+          opacity={0.75}
+        />
+      </mesh>
+
+      {/* Anillo exterior tenue */}
+      <mesh rotation={[Math.PI / 3.5, 0, 0]}>
+        <torusGeometry args={[3.1, 0.08, 6, 120]} />
+        <meshStandardMaterial
+          color={theme === 'dark' ? '#EC4899' : '#F472B6'}
+          transparent
+          opacity={0.35}
+        />
+      </mesh>
+    </group>
+  );
+});
+Planet.displayName = 'Planet';
+
+// ── Luna orbitando ────────────────────────────────────────────────────────────
+const OrbitingMoon = memo(({                                                         
+  radius,
+  speed,
+  size,
+  color,
+  yOffset = 0,
+}: {
+  radius: number;
+  speed: number;
+  size: number;
+  color: string;
+  yOffset?: number;
+}) => {
+  const ref = useRef<THREE.Mesh>(null);
+
+  useFrame(({ clock }) => {
+    const t = clock.getElapsedTime() * speed;
+    if (ref.current) {
+      ref.current.position.x = Math.cos(t) * radius;
+      ref.current.position.z = Math.sin(t) * radius;
+      ref.current.position.y = yOffset + Math.sin(t * 0.5) * 0.3;
+      ref.current.rotation.y += 0.01;
+    }
+  });
+
+  return (
+    <mesh ref={ref}>
+      <sphereGeometry args={[size, 24, 24]} />
+      <meshStandardMaterial
+        color={color}
+        roughness={0.5}
+        metalness={0.3}
+        emissive={color}
+        emissiveIntensity={0.1}
+      />
+    </mesh>
+  );
+});
+OrbitingMoon.displayName = 'OrbitingMoon';
+
+// ── Nebulosa de partículas ────────────────────────────────────────────────────
+const NebulaParticles = memo(({ theme }: { theme: string }) => {
+  const ref = useRef<THREE.Points>(null);
+
+  const { positions, colors } = useMemo(() => {
+    const count = 300;
+    const pos   = new Float32Array(count * 3);
+    const col   = new Float32Array(count * 3);
+    const palette = theme === 'dark'
+      ? [
+          new THREE.Color('#7C3AED'),
+          new THREE.Color('#EC4899'),
+          new THREE.Color('#00D9FF'),
+        ]
+      : [
+          new THREE.Color('#9333EA'),
+          new THREE.Color('#F472B6'),
+          new THREE.Color('#22D3EE'),
+        ];
+
+    for (let i = 0; i < count; i++) {
+      const angle  = Math.random() * Math.PI * 2;
+      const r      = 5 + Math.random() * 6;
+      pos[i * 3]     = Math.cos(angle) * r;
+      pos[i * 3 + 1] = (Math.random() - 0.5) * 4;
+      pos[i * 3 + 2] = Math.sin(angle) * r;
+
+      const c = palette[Math.floor(Math.random() * palette.length)];
+      col[i * 3]     = c.r;
+      col[i * 3 + 1] = c.g;
+      col[i * 3 + 2] = c.b;
+    }
+    return { positions: pos, colors: col };
+  }, [theme]);
+
+  useFrame(({ clock }) => {
+    if (ref.current) {
+      ref.current.rotation.y = clock.getElapsedTime() * 0.04;
+    }
+  });
+
+  return (
+    <points ref={ref}>
+      <bufferGeometry>
+        <bufferAttribute
+          attach="attributes-position"
+          args={[positions, 3]}
+        />
+        <bufferAttribute
+          attach="attributes-color"
+          args={[colors, 3]}
+        />
+      </bufferGeometry>
+      <pointsMaterial
+        size={0.06}
+        vertexColors
+        transparent
+        opacity={0.8}
+        sizeAttenuation
+      />
+    </points>
+  );
+});
+NebulaParticles.displayName = 'NebulaParticles';
+
+// ── Escena completa ───────────────────────────────────────────────────────────
+const SpaceScene = memo(({ theme, isMobile }: { theme: string; isMobile: boolean }) => {
+  const starsCount = isMobile
+    ? (theme === 'dark' ? 1200 : 800)
+    : (theme === 'dark' ? 2500 : 1800);
 
   return (
     <>
-      {/* Estrellas de fondo adaptativas */}
-      <Stars 
-        radius={100} 
-        depth={50} 
-        count={config.starsCount}
-        factor={4} 
-        saturation={theme === 'dark' ? 0 : 0.3} 
-        fade 
-        speed={1} 
+      {/* Estrellas de fondo */}
+      <Stars
+        radius={100}
+        depth={50}
+        count={starsCount}
+        factor={4}
+        saturation={theme === 'dark' ? 0 : 0.2}
+        fade
+        speed={0.6}
       />
 
-      {/* Esfera principal - siempre visible */}
-      <Float speed={2} rotationIntensity={1} floatIntensity={2}>
-        <Sphere args={[1, config.segments, config.segments]} scale={2}>
-          <MeshDistortMaterial
-            color={colors.primary}
-            attach="material"
-            distort={0.5}
-            speed={config.distortSpeed}
-            roughness={0.2}
-            metalness={0.8}
-          />
-        </Sphere>
-        
-        {/* Esferas adicionales - solo en desktop/tablet */}
-        {config.showAllSpheres && (
-          <>
-            <Sphere args={[0.8, config.segments, config.segments]} scale={2} position={[1.5, 0, 0]}>
-              <MeshDistortMaterial
-                color={colors.secondary}
-                attach="material"
-                distort={0.4}
-                speed={1.5}
-                roughness={0.2}
-                metalness={0.8}
-              />
-            </Sphere>
-            <Sphere args={[0.6, config.segments, config.segments]} scale={2} position={[-1.2, 0.5, 0.5]}>
-              <MeshDistortMaterial
-                color={colors.accent}
-                attach="material"
-                distort={0.6}
-                speed={1.8}
-                roughness={0.2}
-                metalness={0.8}
-              />
-            </Sphere>
-          </>
-        )}
-      </Float>
+      {/* Planeta con anillos */}
+      <Planet theme={theme} />
+
+      {/* Lunas orbitando */}
+      <OrbitingMoon radius={3.2} speed={0.4} size={0.22} color={theme === 'dark' ? '#EC4899' : '#F472B6'} yOffset={0.4} />
+      <OrbitingMoon radius={4.5} speed={0.25} size={0.35} color={theme === 'dark' ? '#00D9FF' : '#22D3EE'} yOffset={-0.3} />
+      {!isMobile && (
+        <OrbitingMoon radius={5.8} speed={0.15} size={0.18} color={theme === 'dark' ? '#7C3AED' : '#9333EA'} yOffset={0.6} />
+      )}
+
+      {/* Nube de partículas tipo nebulosa */}
+      {!isMobile && <NebulaParticles theme={theme} />}
     </>
   );
 });
-
-AnimatedSphere.displayName = 'AnimatedSphere';
+SpaceScene.displayName = 'SpaceScene';
 
 export default function Projects() {
   const { theme } = useTheme();
   const { t } = useLanguage();
   const isMobile = useIsMobile();
+  const [activeFilter, setActiveFilter] = useState('all');
+
+  const filters = useMemo(() => [
+    { key: 'all', label: t('projects.filters.all') },
+    { key: 'frontend', label: t('projects.filters.frontend') },
+    { key: 'fullstack', label: t('projects.filters.fullstack') },
+    { key: 'mobile', label: t('projects.filters.mobile') }
+  ], [t]);
 
   // Memoizar projects para evitar recreación
   const projects = useMemo(() => [
@@ -149,6 +247,8 @@ export default function Projects() {
       description: t('projects.items.perfume.description'),
       image: '/store.png',
       tags: ['HTML', 'CSS', 'JS', 'MySQL', 'Python'],
+      category: 'fullstack',
+      featured: false,
       github: 'https://github.com/OliverN77/store',
       demo: 'https://store--olivernie2626.replit.app',
       color: theme === 'dark' ? '#7C3AED' : '#9333EA'
@@ -158,6 +258,8 @@ export default function Projects() {
       description: t('projects.items.thinkel.description'),
       image: '/thinkel.png',
       tags: ['React', 'Node.js', 'MongoDB'],
+      category: 'fullstack',
+      featured: true,
       github: 'https://github.com/OliverN77/thinkel',
       demo: 'https://thinkelpage-3y4d-ayvy.vercel.app/',
       color: theme === 'dark' ? '#EC4899' : '#F472B6'
@@ -167,6 +269,8 @@ export default function Projects() {
       description: t('projects.items.motos.description'),
       image: '/motos.png',
       tags: ['Python', 'HTML', 'CSS'],
+      category: 'fullstack',
+      featured: false,
       github: 'https://github.com/OliverN77/Motos',
       demo: 'https://motos-xi.vercel.app/',
       color: theme === 'dark' ? '#00D9FF' : '#22D3EE'
@@ -176,6 +280,8 @@ export default function Projects() {
       description: t('projects.items.weather.description'),
       image: '/weather.png',
       tags: ['HTML', 'WeatherAPI', 'CSS', 'JS'],
+      category: 'frontend',
+      featured: false,
       github: 'https://github.com/OliverN77/wheater-app',
       demo: 'https://olivern77.github.io/wheater-app/',
       color: '#F59E0B'
@@ -185,6 +291,8 @@ export default function Projects() {
       description: t('projects.items.store.description'),
       image: '/store-management.png',
       tags: ['React Native', 'Node.js', 'SQL Server Management Studio'],
+      category: 'mobile',
+      featured: false,
       github: 'https://github.com/OliverN77/store-management',
       demo: 'https://store-management-rg.netlify.app/',
       color: '#10B981'
@@ -194,11 +302,18 @@ export default function Projects() {
       description: t('projects.items.calculator.description'),
       image: '/calculadora.png',
       tags: ['React', 'Framer Motion', 'CSS'],
+      category: 'frontend',
+      featured: false,
       github: 'https://github.com/OliverN77/calculadora-nota',
       demo: 'https://calculadora-nota-alpha.vercel.app/',
       color: '#EF4444'
     },
   ], [t, theme]);
+
+  const filteredProjects = useMemo(() => {
+    if (activeFilter === 'all') return projects;
+    return projects.filter((project) => project.category === activeFilter);
+  }, [activeFilter, projects]);
 
   // Colores dinámicos memoizados
   const styles = useMemo(() => ({
@@ -210,6 +325,7 @@ export default function Projects() {
     textTertiary: theme === 'dark' ? '#9ca3af' : '#6b7280',
     cardBg: theme === 'dark' ? 'rgba(31, 41, 55, 0.5)' : 'rgba(255, 255, 255, 0.9)',
     cardBorder: theme === 'dark' ? 'rgba(75, 85, 99, 0.5)' : 'rgba(229, 231, 235, 1)',
+    iconBg: theme === 'dark' ? '#7c3aed' : '#9333ea',
     tagBg: theme === 'dark' ? 'rgba(55, 65, 81, 0.5)' : 'rgba(243, 244, 246, 1)',
     tagText: theme === 'dark' ? '#d1d5db' : '#374151',
     tagBorder: theme === 'dark' ? 'rgba(75, 85, 99, 1)' : 'rgba(209, 213, 219, 1)',
@@ -232,27 +348,34 @@ export default function Projects() {
     >
       {/* 3D Background optimizado */}
       {typeof window !== 'undefined' && (
-        <div className={`absolute inset-0 transition-opacity duration-500 ${theme === 'dark' ? 'opacity-50' : 'opacity-30'}`}>
-          <Canvas 
-            camera={{ position: [0, 0, 5], fov: 75 }}
+        <div className={`absolute inset-0 transition-opacity duration-500 ${theme === 'dark' ? 'opacity-60' : 'opacity-35'}`}>
+          <Canvas
+            camera={{ position: [0, 2, 8], fov: 65 }}
             dpr={isMobile ? [1, 1.5] : [1, 2]}
             performance={{ min: 0.5 }}
             gl={{
               antialias: !isMobile,
-              powerPreference: isMobile ? 'low-power' : 'high-performance'
+              powerPreference: isMobile ? 'low-power' : 'high-performance',
             }}
           >
-            <ambientLight intensity={theme === 'dark' ? 1 : 1.5} />
-            <directionalLight position={[10, 10, 5]} intensity={theme === 'dark' ? 2 : 2.5} />
-            {/* PointLights solo en desktop */}
+            <ambientLight intensity={theme === 'dark' ? 0.8 : 1.2} />
+            <directionalLight position={[8, 6, 4]} intensity={theme === 'dark' ? 2 : 2.5} color="#ffffff" />
             {!isMobile && (
               <>
-                <pointLight position={[-10, -10, -5]} intensity={1.2} color={theme === 'dark' ? '#7C3AED' : '#9333EA'} />
-                <pointLight position={[10, 10, 5]} intensity={1} color={theme === 'dark' ? '#EC4899' : '#F472B6'} />
+                {/* Luz azul-cian lateral: efecto atmósfera */}
+                <pointLight position={[-8, 2, 3]} intensity={1.5} color={theme === 'dark' ? '#00D9FF' : '#22D3EE'} />
+                {/* Luz púrpura desde abajo */}
+                <pointLight position={[4, -5, -4]} intensity={1.2} color={theme === 'dark' ? '#7C3AED' : '#9333EA'} />
               </>
             )}
-            <AnimatedSphere theme={theme} isMobile={isMobile} />
-            <OrbitControls enableZoom={false} autoRotate autoRotateSpeed={0.5} />
+            <SpaceScene theme={theme} isMobile={isMobile} />
+            <OrbitControls
+              enableZoom={false}
+              autoRotate
+              autoRotateSpeed={0.3}
+              maxPolarAngle={Math.PI / 1.8}
+              minPolarAngle={Math.PI / 3}
+            />
           </Canvas>
         </div>
       )}
@@ -307,9 +430,29 @@ export default function Projects() {
           </motion.p>
         </motion.div>
 
+        {/* Filters */}
+        <div className="flex gap-3 justify-center mb-10 flex-wrap">
+          {filters.map((filter) => (
+            <motion.button
+              key={filter.key}
+              onClick={() => setActiveFilter(filter.key)}
+              className="px-4 py-2 rounded-full font-medium text-sm transition-colors"
+              animate={{
+                backgroundColor: activeFilter === filter.key ? styles.iconBg : 'transparent',
+                color: activeFilter === filter.key ? '#ffffff' : styles.textSecondary,
+                border: activeFilter === filter.key ? 'none' : `1px solid ${styles.cardBorder}`
+              }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              {filter.label}
+            </motion.button>
+          ))}
+        </div>
+
         {/* Projects Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((project, index) => (
+          {filteredProjects.map((project, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 50 }}
@@ -317,7 +460,7 @@ export default function Projects() {
               viewport={{ once: true, amount: 0.3 }}
               transition={{ delay: index * 0.1, duration: 0.5 }}
               whileHover={{ y: -10 }}
-              className="group"
+              className={`group ${project.featured ? 'lg:col-span-2' : ''}`}
             >
               <div 
                 className="h-full rounded-2xl overflow-hidden shadow-xl backdrop-blur-sm transition-all duration-300"

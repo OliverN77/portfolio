@@ -1,13 +1,16 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { Mail, MapPin, Phone, Send, CheckCircle, XCircle } from 'lucide-react';
+import { Mail, MapPin, Phone, Send, CheckCircle, XCircle, MessageCircle, Linkedin } from 'lucide-react';
 import emailjs from '@emailjs/browser';
 import { EMAILJS_CONFIG, isEmailJSConfigured } from '@/lib/emailConfig';
 import dynamic from 'next/dynamic';
-import { memo, useMemo, useState, useEffect } from 'react';
+import { memo, useMemo, useState } from 'react';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useIsMobile } from '@/hooks/useIsMobile';
+import { SiWhatsapp } from "react-icons/si";
+import { FaLinkedin } from "react-icons/fa";
 
 // Lazy load componentes 3D
 const Canvas = dynamic(
@@ -39,25 +42,6 @@ const Stars = dynamic(
   () => import('@react-three/drei').then((mod) => mod.Stars),
   { ssr: false }
 );
-
-// Hook para detectar dispositivos móviles (evita hidratación)
-function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(false);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  return mounted ? isMobile : false;
-}
 
 // Componente 3D optimizado con memoización
 const AnimatedCones = memo(({ theme, isMobile }: { theme: string; isMobile: boolean }) => {
@@ -161,10 +145,19 @@ export default function Contact() {
     message: string;
   }>({ type: null, message: '' });
 
+  const isValidEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Verificar si EmailJS está configurado
+    if (!isValidEmail(formData.email)) {
+      setSubmitStatus({
+        type: 'error',
+        message: t('contact.form.invalidEmail')
+      });
+      return;
+    }
+
     if (!isEmailJSConfigured()) {
       setSubmitStatus({
         type: 'error',
@@ -431,6 +424,35 @@ export default function Contact() {
                 {t('contact.cta.description')}
               </p>
             </motion.div>
+
+            <div className="flex flex-col sm:flex-row gap-4">
+              <motion.a
+                href="https://wa.me/573011921747?text=Hola%20Oliver%2C%20vi%20tu%20portafolio..."
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-medium text-white"
+                style={{ backgroundColor: '#25D366' }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.98 }}
+                aria-label={t('contact.whatsapp')}
+              >
+                <SiWhatsapp className="w-5 h-5" />
+                {t('contact.whatsapp')}
+              </motion.a>
+              <motion.a
+                href="https://www.linkedin.com/in/oliver-nieto-b33127383/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-medium text-white"
+                style={{ backgroundColor: '#0A66C2' }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.98 }}
+                aria-label={t('contact.linkedin')}
+              >
+                <FaLinkedin className="w-5 h-5" />
+                {t('contact.linkedin')}
+              </motion.a>
+            </div>
           </motion.div>
 
           {/* Contact Form */}
